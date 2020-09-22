@@ -12,7 +12,6 @@ namespace LogToCsvFile
         private String level;
         private DateTime date;
         private String descr;
-
         private Regex regex;
         private HashSet<string> levelList = new HashSet<string>();
 
@@ -28,10 +27,6 @@ namespace LogToCsvFile
         {
             return this.regex;
         }
-        public HashSet<string> GetLevelList()
-        {
-            return this.levelList;
-        }
         public string GetDesc()
         {
             return this.descr;
@@ -40,8 +35,6 @@ namespace LogToCsvFile
         {
             return this.date;
         }
-
-        
         public void SetNo(int no1)
         {
             no = no1;
@@ -62,33 +55,17 @@ namespace LogToCsvFile
         {
             this.date = date;
         }
-
         public void SetLevelList(HashSet<string> l1)
         {
             if(l1.Count > 0)
             this.levelList = l1;     
         }
-
         public override string ToString()
         {
             string str = " " + no + date + level + descr + levelList.ToString();
             return str;
         }
-
-        public void Display()
-        {
-            Console.WriteLine($"No {this.no}");
-            Console.WriteLine($"date {this.date}");
-            Console.WriteLine($"level {this.level}");
-            Console.WriteLine($"descr {this.descr}");
-
-            foreach(var no in levelList)
-            {
-                Console.WriteLine(no);
-            }
-        }
-
-         public string AddExtension(string destinationPath)
+        public string AddExtension(string destinationPath)
         {
             string str = destinationPath; 
             if(!Path.HasExtension(destinationPath))

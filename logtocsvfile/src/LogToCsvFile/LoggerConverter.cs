@@ -8,6 +8,9 @@ namespace LogToCsvFile
 {
     public class LoggerConverter
     {    
+        private int num = 0;
+        private  string destWithExt;
+        private HashSet<string> levelList = new HashSet<string>();
         CsvFile csvfile = new CsvFile();
         public void ReadDataFromFile(string sourcePath , string destinationPath)
         {
@@ -21,7 +24,6 @@ namespace LogToCsvFile
                 WriteDataTotheFileInFormat(line);
             }
         }
-
         public void WriteDataTotheFileInFormat(string line)
         {
             if(csvfile.GetRegex().IsMatch(line))
@@ -54,9 +56,6 @@ namespace LogToCsvFile
                }
             }
         }
-
-
-
         public void AddDataToTheFile(int no, DateTime date, string level, string text,string filepath)
         {
             try
@@ -69,12 +68,7 @@ namespace LogToCsvFile
                         string header = "No|  Date  | Time    |Level  |      Text      |\n";
                         file.WriteLine(header);
                     }
-                    file.WriteLine( no + "|" + date + "|" + level + "|" + text);   
-                    Console.WriteLine(no);
-                    Console.WriteLine(date);
-                    Console.WriteLine(level);
-                    Console.WriteLine(text);
-
+                    file.WriteLine( no + "|" + date + "|" + level + "|" + text); 
                 }
             }
             catch(Exception ex)
@@ -82,8 +76,6 @@ namespace LogToCsvFile
                 Console.WriteLine(ex.Message);
             }
         }
-
-        private int num = 0;
         public void AddDataToTheFile(DateTime date, string level, string text,string filepath, HashSet<string> list1)
         {
             try
@@ -100,14 +92,9 @@ namespace LogToCsvFile
                                 string header = "No|  Date  | Time    |Level  |      Text      |\n";
                                 file.WriteLine(header);
                             }
-                            file.WriteLine(num + "|" + date + "|" + level + "|" + text);   
-                            Console.WriteLine(num);
-                            Console.WriteLine(date);
-                            Console.WriteLine(level);
-                            Console.WriteLine(text);
+                            file.WriteLine(num + "|" + date + "|" + level + "|" + text); 
                         }
                     }
-
                 }
             }
             catch(Exception ex)
@@ -115,8 +102,6 @@ namespace LogToCsvFile
                 Console.WriteLine(ex.Message);
             }
         }
-        private  string destWithExt;
-        private HashSet<string> levelList = new HashSet<string>();
         public void SetLevelList(HashSet<string> l1)
         {
             if(l1.Count > 0)
