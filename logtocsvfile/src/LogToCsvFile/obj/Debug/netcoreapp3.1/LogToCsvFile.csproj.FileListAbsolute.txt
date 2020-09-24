@@ -1,0 +1,15 @@
+E:\Assignment_01\logtocsvfile\src\LogToCsvFile\bin\Debug\netcoreapp3.1\LogToCsvFile.exe
+E:\Assignment_01\logtocsvfile\src\LogToCsvFile\bin\Debug\netcoreapp3.1\LogToCsvFile.deps.json
+E:\Assignment_01\logtocsvfile\src\LogToCsvFile\bin\Debug\netcoreapp3.1\LogToCsvFile.runtimeconfig.json
+E:\Assignment_01\logtocsvfile\src\LogToCsvFile\bin\Debug\netcoreapp3.1\LogToCsvFile.runtimeconfig.dev.json
+E:\Assignment_01\logtocsvfile\src\LogToCsvFile\bin\Debug\netcoreapp3.1\LogToCsvFile.dll
+E:\Assignment_01\logtocsvfile\src\LogToCsvFile\bin\Debug\netcoreapp3.1\LogToCsvFile.pdb
+E:\Assignment_01\logtocsvfile\src\LogToCsvFile\bin\Debug\netcoreapp3.1\Autofac.dll
+E:\Assignment_01\logtocsvfile\src\LogToCsvFile\obj\Debug\netcoreapp3.1\LogToCsvFile.csprojAssemblyReference.cache
+E:\Assignment_01\logtocsvfile\src\LogToCsvFile\obj\Debug\netcoreapp3.1\LogToCsvFile.AssemblyInfoInputs.cache
+E:\Assignment_01\logtocsvfile\src\LogToCsvFile\obj\Debug\netcoreapp3.1\LogToCsvFile.AssemblyInfo.cs
+E:\Assignment_01\logtocsvfile\src\LogToCsvFile\obj\Debug\netcoreapp3.1\LogToCsvFile.csproj.CoreCompileInputs.cache
+E:\Assignment_01\logtocsvfile\src\LogToCsvFile\obj\Debug\netcoreapp3.1\LogToCsvFile.csproj.CopyComplete
+E:\Assignment_01\logtocsvfile\src\LogToCsvFile\obj\Debug\netcoreapp3.1\LogToCsvFile.dll
+E:\Assignment_01\logtocsvfile\src\LogToCsvFile\obj\Debug\netcoreapp3.1\LogToCsvFile.pdb
+E:\Assignment_01\logtocsvfile\src\LogToCsvFile\obj\Debug\netcoreapp3.1\LogToCsvFile.genruntimeconfig.cache

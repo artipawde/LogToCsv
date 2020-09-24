@@ -6,106 +6,112 @@ using System.Text.RegularExpressions;
 
 namespace LogToCsvFile
 {
-    public class LoggerConverter
-    {    
+    public class LoggerConverter : ILoggerConverter
+    {
         private int num = 0;
-        private  string destWithExt;
+        private string destWithExt;
         private HashSet<string> levelList = new HashSet<string>();
-        CsvFile csvfile = new CsvFile();
-        public void ReadDataFromFile(string sourcePath , string destinationPath)
+        ICsvFile _csvfile;
+        public LoggerConverter(ICsvFile csvFile)
         {
-            this.destWithExt = csvfile.AddExtension(destinationPath);
+            _csvfile = csvFile;
+        }
+        public void ReadDataFromFile(string sourcePath, string destinationPath)
+        {
+            this.destWithExt = _csvfile.AddExtension(destinationPath);
             List<string> lines = File.ReadAllLines(sourcePath).ToList();
 
-            foreach(string line in lines)
-            {    
+            foreach (string line in lines)
+            {
                 string strRegex = @"(0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])\s(0[1-9]|1[012])[:](0[1-9]|[12345][0-9])[:](0[1-9]|[12345][0-9])\s(INFO|WARN|DEBUG|TRACE|ERROR|EVENT)";
-                csvfile.SetRegex(strRegex); 
+                _csvfile.SetRegex(strRegex);
                 WriteDataTotheFileInFormat(line);
             }
         }
         public void WriteDataTotheFileInFormat(string line)
         {
-            if(csvfile.GetRegex().IsMatch(line))
-            {   
+            if (_csvfile.GetRegex().IsMatch(line))
+            {
                 string[] words = line.Split(" ");
-                for(int i = 0 ; i < words.Length; i++)
+                for (int i = 0; i < words.Length; i++)
                 {
-                    string[] dateString = words[0].Split('/');  
+                    string[] dateString = words[0].Split('/');
                     string[] timeString = words[1].Split(':');
 
-                    try{
-                    DateTime datetime = new DateTime (DateTime.Now.Year, Int32.Parse(dateString[0]), Int32.Parse (dateString[1]), Int32.Parse(timeString[0]),Int32.Parse(timeString[1]),Int32.Parse(timeString[2]));
-                    csvfile.SetDate(datetime);
+                    try
+                    {
+                        DateTime datetime = new DateTime(DateTime.Now.Year, Int32.Parse(dateString[0]), Int32.Parse(dateString[1]), Int32.Parse(timeString[0]), Int32.Parse(timeString[1]), Int32.Parse(timeString[2]));
+                        _csvfile.SetDate(datetime);
                     }
-                    catch(FormatException ex)
+                    catch (FormatException ex)
                     {
                         Console.WriteLine(ex.Message);
                     }
-                    csvfile.SetLevel(words[2]);
+                    _csvfile.SetLevel(words[2]);
                 }
-                var logText=string.Join(" ",words.Skip(3));
-                csvfile.SetDesc(logText);
-              
-                if(levelList.Count > 0)
+                var logText = string.Join(" ", words.Skip(3));
+                _csvfile.SetDesc(logText);
+
+                if (levelList.Count > 0)
                 {
-                AddDataToTheFile(csvfile.GetDate(),csvfile.GetLevel(),csvfile.GetDesc(),destWithExt,levelList);
+                    AddDataToTheFile(_csvfile.GetDate(), _csvfile.GetLevel(), _csvfile.GetDesc(), destWithExt, levelList);
                 }
-                else{
-                AddDataToTheFile(csvfile.GetNo(),csvfile.GetDate(),csvfile.GetLevel(),csvfile.GetDesc(),destWithExt);
-               }
+                else
+                {
+                    AddDataToTheFile(_csvfile.GetNo(), _csvfile.GetDate(), _csvfile.GetLevel(), _csvfile.GetDesc(), destWithExt);
+                }
             }
         }
-        public void AddDataToTheFile(int no, DateTime date, string level, string text,string filepath)
+        public void AddDataToTheFile(int no, DateTime date, string level, string text, string filepath)
         {
             try
             {
-                using(System.IO.StreamWriter file = new System.IO.StreamWriter(filepath, true))
+                using (System.IO.StreamWriter file = new System.IO.StreamWriter(filepath, true))
                 {
-                    csvfile.SetNo(++no);
-                    if(new FileInfo (filepath).Length == 0)
+                    _csvfile.SetNo(++no);
+                    if (new FileInfo(filepath).Length == 0)
                     {
                         string header = "No|  Date  | Time    |Level  |      Text      |\n";
                         file.WriteLine(header);
                     }
-                    file.WriteLine( no + "|" + date + "|" + level + "|" + text); 
+                    file.WriteLine(no + "|" + date + "|" + level + "|" + text);
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
             }
         }
-        public void AddDataToTheFile(DateTime date, string level, string text,string filepath, HashSet<string> list1)
+        public void AddDataToTheFile(DateTime date, string level, string text, string filepath, HashSet<string> list1)
         {
             try
             {
-                using(System.IO.StreamWriter file = new System.IO.StreamWriter(filepath, true))
+                using (System.IO.StreamWriter file = new System.IO.StreamWriter(filepath, true))
                 {
-                    foreach(string str in list1)
+                    foreach (string str in list1)
                     {
-                        if(level == str)
+                        if (level == str)
                         {
-                            csvfile.SetNo(++num);
-                            if(new FileInfo (filepath).Length == 0)
+                            _csvfile.SetNo(++num);
+                            if (new FileInfo(filepath).Length == 0)
                             {
                                 string header = "No|  Date  | Time    |Level  |      Text      |\n";
                                 file.WriteLine(header);
                             }
-                            file.WriteLine(num + "|" + date + "|" + level + "|" + text); 
+                            file.WriteLine(num + "|" + date + "|" + level + "|" + text);
                         }
                     }
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
             }
         }
         public void SetLevelList(HashSet<string> l1)
         {
-            if(l1.Count > 0)
-            this.levelList = l1;     
+            if (l1.Count > 0)
+                this.levelList = l1;
         }
-    }    
+    }
 }

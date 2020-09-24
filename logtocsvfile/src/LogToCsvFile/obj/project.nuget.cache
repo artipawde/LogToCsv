@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "ffidwvLiLGeIVrCquAm18RhjXBbLOD6S3aJ6UJgWWaAoJPrX5daYwcUX4z7ztSXqSzJakFGD88i05L3m2c1b9A==",
+  "success": true,
+  "projectFilePath": "E:\\Assignment_01\\logtocsvfile\\src\\LogToCsvFile\\LogToCsvFile.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Arti Pawde\\.nuget\\packages\\autofac\\5.2.0\\autofac.5.2.0.nupkg.sha512"
+  ],
+  "logs": []
+}

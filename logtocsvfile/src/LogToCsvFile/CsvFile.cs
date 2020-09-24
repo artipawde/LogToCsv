@@ -6,9 +6,9 @@ using System.IO;
 
 namespace LogToCsvFile
 {
-    public class CsvFile
-    { 
-        private int no ;
+    public class CsvFile : ICsvFile
+    {
+        private int no;
         private String level;
         private DateTime date;
         private String descr;
@@ -45,7 +45,7 @@ namespace LogToCsvFile
         }
         public void SetRegex(string str)
         {
-            this.regex = new Regex (str);
+            this.regex = new Regex(str);
         }
         public void SetDesc(string descr)
         {
@@ -57,8 +57,8 @@ namespace LogToCsvFile
         }
         public void SetLevelList(HashSet<string> l1)
         {
-            if(l1.Count > 0)
-            this.levelList = l1;     
+            if (l1.Count > 0)
+                this.levelList = l1;
         }
         public override string ToString()
         {
@@ -67,33 +67,35 @@ namespace LogToCsvFile
         }
         public string AddExtension(string destinationPath)
         {
-            string str = destinationPath; 
-            if(!Path.HasExtension(destinationPath))
+            string str = destinationPath;
+            if (!Path.HasExtension(destinationPath))
             {
-                if(Path.EndsInDirectorySeparator(destinationPath))
+                if (Path.EndsInDirectorySeparator(destinationPath))
                 {
                     str += "log.csv";
                 }
-                else{
+                else
+                {
                     str += ".csv";
                 }
             }
             else
             {
                 string getExtension = Path.GetExtension(destinationPath);
-                if(getExtension != ".csv")
+                if (getExtension != ".csv")
                 {
                     str = Path.ChangeExtension(destinationPath, ".csv");
                 }
-            }  
-            try{
-            Directory.CreateDirectory(Path.GetDirectoryName(str));
             }
-            catch(ArgumentException ex)
+            try
+            {
+                Directory.CreateDirectory(Path.GetDirectoryName(str));
+            }
+            catch (ArgumentException ex)
             {
                 Console.WriteLine(ex.Message);
             }
-            return str;      
+            return str;
         }
-    }   
+    }
 }

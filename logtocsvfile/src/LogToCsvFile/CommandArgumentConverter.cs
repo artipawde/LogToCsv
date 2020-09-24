@@ -6,15 +6,21 @@ using System.Text.RegularExpressions;
 
 namespace LogToCsvFile
 {
-    public class CommandArgumentConverter
+    public class CommandArgumentConverter : ICommandArgumentConverter
     {
         private string sourcePath;
         private string destinationPath;
-        private HashSet<string> actualLevel = new HashSet<string>{ "WARN" , "DEBUG" , "TRACE" , "ERROR" , "EVENT", "INFO"};
+        private HashSet<string> actualLevel = new HashSet<string> { "WARN", "DEBUG", "TRACE", "ERROR", "EVENT", "INFO" };
         private HashSet<string> userLevel = new HashSet<string>();
         private string[] allFilePath;
-        LoggerConverter lc = new LoggerConverter();
-        CsvFile csvfile = new CsvFile();
+        private HashSet<string> allSourcePath = new HashSet<string>();
+        ILoggerConverter _loggerConverter;
+        ICsvFile _csvfile;
+        public CommandArgumentConverter(ICsvFile csvFile, ILoggerConverter loggerConverter)
+        {
+            _csvfile = csvFile;
+            _loggerConverter = loggerConverter;
+        }
         public HashSet<string> GetUserLevel()
         {
             return userLevel;
@@ -27,54 +33,72 @@ namespace LogToCsvFile
         {
             this.allFilePath = allFilePath;
         }
+        public void SetAllSourcePath(string Path)
+        {
+            allSourcePath.Add(Path);
+        }
+        public HashSet<string> GetAllSourcePath()
+        {
+            return this.allSourcePath;
+        }
         public void CheckArgument(string[] args)
         {
-            for(int i =0; i < args.Length; i++)
+            try{
+            for (int i = 0; i < args.Length; i++)
             {
-            string extenion =  Path.GetExtension(sourcePath);
-            if(args[i].ToLower() == "--log-dir")
-            {
-                this.sourcePath = args[i + 1];
+                string extenion = Path.GetExtension(sourcePath);
+                if (args[i].ToLower() == "--log-dir")
+                {
+                   this.sourcePath = args[i + 1];
+                }
+                else if (args[i].ToLower() == "--csv")
+                {
+                    this.destinationPath = args[i + 1];
+                }
+                else if (args[i].ToLower() == "--log-level")
+                {
+                    userLevel.Add(args[i + 1].ToUpper());
+                }
             }
-            else if(args[i].ToLower() == "--csv")
-            {
-                this.destinationPath = args[i + 1];
             }
-            else if(args[i].ToLower() == "--log-level")
-            {
-                userLevel.Add(args[i + 1].ToUpper());
-            }
+            catch(Exception){
+                Console.WriteLine($"Invalid Input Please Enter valid Input.");
+                DisplayHelp();
+                Environment.Exit(1);
             }
         }
         public bool IsValidateLevels()
         {
             return userLevel.IsSubsetOf(actualLevel);
         }
-        public bool IsSourceFileOrDiecoryValidate () {
-            if(Path.HasExtension(this.sourcePath))
+        public bool IsSourceFileOrDiecoryValidate()
+        {
+            if (Path.HasExtension(this.sourcePath))
                 return true;
-            return Directory.Exists (this.sourcePath);
+            return Directory.Exists(this.sourcePath);
         }
-        public string[] GetAllLogFiles (){
-            if(Path.HasExtension(this.sourcePath))
+        public string[] GetAllLogFiles()
+        {
+            if (Path.HasExtension(this.sourcePath))
             {
-                if(Path.GetExtension(this.sourcePath) == ".log")
-                    return new string[]{sourcePath};
+                if (Path.GetExtension(this.sourcePath) == ".log")
+                    return new string[] { sourcePath };
                 else
                 {
                     Console.WriteLine("Please Give correct Input Log File.");
                     DisplayHelp();
                 }
             }
-           return Directory.GetFiles (this.sourcePath, "*.log", SearchOption.AllDirectories);
+            return Directory.GetFiles(this.sourcePath, "*.log", SearchOption.AllDirectories);
         }
+        
         public void LevelGivenByUser()
         {
-            foreach(string str in allFilePath)
+            foreach (string str in allFilePath)
             {
-                lc.SetLevelList(userLevel);
-                csvfile.SetLevelList(userLevel);
-                lc.ReadDataFromFile(str, this.destinationPath);
+                _loggerConverter.SetLevelList(userLevel);
+                _csvfile.SetLevelList(userLevel);
+                _loggerConverter.ReadDataFromFile(str, this.destinationPath);
             }
         }
         public void DisplayHelp()
